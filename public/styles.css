@@ -54,12 +54,13 @@ a.button:hover {
 
 /* Form Style */
 form {
-    margin: 20px auto;
+    margin: 20px auto; /* This centers the form horizontally */
     max-width: 300px;
     padding: 20px;
     background-color: #2a475e;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: block; /* Ensure the form behaves as a block element */
 }
 
 form input {
