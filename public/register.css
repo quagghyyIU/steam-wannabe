@@ -5,52 +5,40 @@ body {
     padding: 0;
     background-color: #1b2838; /* Epic Gamer dark theme */
     color: #c7d5e0; /* Light text */
+    height: 100vh; /* Full viewport height for centering */
+    display: flex; /* Flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
 }
 
-/* Header Style */
-header {
-    background-color: #171a21; /* Header dark background */
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-header a {
-    color: #c7d5e0;
-    text-decoration: none;
-    margin: 0 10px;
-    font-size: 18px;
-}
-
-header a:hover {
-    color: #66c0f4; /* Hover effect */
-}
-
-/* Main Content Style */
-main {
-    padding: 20px;
+/* Form Container Style */
+.form-container {
+    background-color: #2a475e; /* Darker background for contrast */
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    padding: 30px;
+    max-width: 400px; /* Increased width for better appearance */
+    width: 100%; /* Ensure responsiveness */
     text-align: center;
 }
 
-h1 {
-    font-size: 36px;
+/* Header Style */
+h2 {
+    font-size: 28px;
     color: #66c0f4; /* Accent color */
+    margin-bottom: 20px; /* Space below header */
 }
 
 /* Form Style */
 form {
-    margin: 20px auto;
-    max-width: 300px;
-    padding: 20px;
-    background-color: #2a475e;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    display: block; /* Ensure the form behaves as a block element */
+    display: flex;
+    flex-direction: column; /* Stack inputs vertically */
+    align-items: center; /* Center align items */
 }
 
+form select,
 form input {
-    width: 90%;
+    width: 90%; /* Full width with padding */
     padding: 10px;
     margin: 10px 0;
     border: none;
@@ -60,8 +48,13 @@ form input {
     font-size: 16px;
 }
 
+/* Show/hide Studio Name Field */
+form #studioName {
+    display: none;
+}
+
 form button {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     background-color: #66c0f4;
     border: none;
@@ -75,25 +68,39 @@ form button:hover {
     background-color: #417a9b;
 }
 
-/* Small Button Styling */
-.small-button {
-    padding: 5px 10px; /* Small padding to make it compact */
-    font-size: 14px; /* Smaller font size */
-    background-color: #4CAF50; /* Button color */
-    color: white; /* Text color */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Change cursor to pointer */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Allow it to sit inline with text */
-    margin-top: 15px; /* Space between the register button and this one */
+/* Notification Styles */
+.notification {
+    display: none; /* Hidden by default */
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
 }
 
-.small-button:hover {
-    background-color: #45a049; /* Darker shade on hover */
+.notification.error {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
 }
 
-/* Button Container for Spacing */
-.button-container {
-    margin-bottom: 15px; /* Space between the buttons */
+.notification.success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+/* Footer */
+p {
+    margin-top: 20px;
+    color: #c7d5e0;
+}
+
+p a {
+    color: #66c0f4;
+    text-decoration: none;
+}
+
+p a:hover {
+    color: #417a9b;
 }
