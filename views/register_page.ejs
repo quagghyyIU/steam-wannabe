@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <style>
+  /* Add notification styles */
+  .notification {
+    display: none;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+  }
+  .error {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+  }
+  .success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+  }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Register</h2>
+
+    <!-- Notification Display -->
+    <div id="notification" class="notification"></div>
+
+    <form id="registerForm" action="/register" method="POST">
+      <select name="role" id="role" required>
+        <option value="" disabled selected>Choose Role</option>
+        <option value="user">User</option>
+        <option value="developer">Developer</option>
+      </select>
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="text" id="studioName" name="studioName" placeholder="Studio Name" style="display: none;">
+      <button type="submit">Register</button>
+    </form>
+
+    <p>Already have an account? <a href="/login">Login here</a></p>
+  </div>
+
+  <script>
+    const notification = document.getElementById('notification');
+
+    // Function to show notification
+    function showNotification(message, type) {
+      notification.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.style.display = 'block';
+      setTimeout(() => notification.style.display = 'none', 3000);
+    }
+
+    // Toggle Studio Name Field
+    document.getElementById('role').addEventListener('change', () => {
+      const role = document.getElementById('role').value;
+      document.getElementById('studioName').style.display = role === 'developer' ? 'block' : 'none';
+    });
+
+    // Handle Form Submission
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData);
+
+      try {
+        const response = await fetch('/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          showNotification('Registration successful!', 'success');
+          setTimeout(() => window.location.href = '/login', 2000);
+        } else {
+          showNotification(result.message || 'Registration failed!', 'error');
+        }
+      } catch (error) {
+        console.error(error);
+        showNotification('Something went wrong. Please try again.', 'error');
+      }
+    });
+  </script>
+</body>
+</html>
