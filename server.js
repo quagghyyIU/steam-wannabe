@@ -9,6 +9,7 @@ const port = 3000;
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
 
 // Set up session management
 app.use(session({
@@ -26,6 +27,11 @@ let db = new sqlite3.Database('./game_store.db', (err) => {
         return console.error(err.message);
     }
     console.log('Connected to the SQLite database.');
+});
+
+// Render the homepage (home.ejs)
+app.get('/', (req, res) => {
+    res.render('home'); // Render the home.ejs file
 });
 
 // Render the register page
