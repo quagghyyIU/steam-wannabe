@@ -29,9 +29,23 @@ let db = new sqlite3.Database('./game_store.db', (err) => {
     console.log('Connected to the SQLite database.');
 });
 
+// Authentication middleware
+function isAuthenticated(req, res, next) {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
 // Render the homepage (home.ejs)
 app.get('/', (req, res) => {
     res.render('home'); // Render the home.ejs file
+});
+
+// Render the user dashboard
+app.get('/dashboard', isAuthenticated, (req, res) => {
+    res.render('user_dashboard', { user: req.session.user });
 });
 
 // Render the register page
@@ -39,6 +53,13 @@ app.get('/register', (req, res) => {
     const message = req.session.message || ''; // Ensure message is defined
     req.session.message = null; // Clear message after displaying
     res.render('register_page', { message }); // Pass message to EJS
+});
+
+// Render the login page
+app.get('/login', (req, res) => {
+    const message = req.session.message || '';  // Ensure message is defined
+    req.session.message = null;  // Clear message after displaying
+    res.render('login_page', { message });
 });
 
 // Register route
@@ -80,6 +101,42 @@ app.post('/register', (req, res) => {
             }
             res.status(201).json({ message: 'Registration successful!' });
         });
+    });
+});
+
+// Login route
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const userQuery = `SELECT UserID AS id, Username, 'user' AS Role FROM User WHERE Username = ? AND Password = ?`;
+    const developerQuery = `SELECT DeveloperID AS id, Username, 'developer' AS Role FROM Developer WHERE Username = ? AND Password = ?`;
+
+    db.get(`${userQuery} UNION ${developerQuery}`, [username, password, username, password], (err, row) => {
+        if (err) {
+            console.error(err.message);
+            return res.status(500).json({ message: 'Database error' });
+        }
+
+        if (!row) {
+            return res.status(400).json({ message: 'Invalid username or password' });
+        }
+
+        req.session.user = { id: row.id, username: row.Username, role: row.Role };
+        res.status(200).json({ message: 'Login successful!' });
+    });
+});
+
+// Logout route
+app.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error(err.message);
+        }
+        res.redirect('/login');
     });
 });
 
