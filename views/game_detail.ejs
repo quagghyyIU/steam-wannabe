@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <title><%= game.Title %> - Steam</title>
+</head>
+<body style="background-color: #1b2838; color: white;">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="/dashboard">Steam</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="/dashboard">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/dashboard">Store</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Game Image -->
+        <div class="col-md-6">
+            <img src="<%= game.Image %>" class="img-fluid" alt="<%= game.Title %>" style="border-radius: 10px;">
+        </div>
+
+        <!-- Game Details -->
+        <div class="col-md-6">
+            <h1><%= game.Title %></h1>
+            <p class="text-muted">Game ID: <%= game.GameID %></p>
+            <p><%= game.Description %></p>
+            <h2 class="text-success">$<%= game.Price.toFixed(2) %></h2>
+            <button class="btn btn-primary btn-lg mt-3">Add to Cart</button>
+        </div>
+    </div>
+
+    <!-- Additional Details Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3>About the Game</h3>
+            <p><%= game.Description %></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
