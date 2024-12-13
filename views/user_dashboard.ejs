@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #1b2838;
+            padding: 15px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            padding: 30px;
+        }
+        .game-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 250px;
+            display: inline-block;
+        }
+        .game-card img {
+            width: 100%;
+            height: 150px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .game-card h3 {
+            margin: 10px 0;
+            color: #333;
+        }
+        .game-card p {
+            color: #555;
+        }
+        .game-card button {
+            background: #1b2838;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .game-card button:hover {
+            background: #3b5162;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Game Store</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/library">My Library</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <div class="content">
+        <h2>Featured Games</h2>
+        <div class="game-card">
+            <img src="https://via.placeholder.com/250x150" alt="Game 1">
+            <h3>Game Title 1</h3>
+            <p>$29.99</p>
+            <button>Buy Now</button>
+        </div>
+
+        <div class="game-card">
+            <img src="https://via.placeholder.com/250x150" alt="Game 2">
+            <h3>Game Title 2</h3>
+            <p>$19.99</p>
+            <button>Buy Now</button>
+        </div>
+
+        <div class="game-card">
+            <img src="https://via.placeholder.com/250x150" alt="Game 3">
+            <h3>Game Title 3</h3>
+            <p>$39.99</p>
+            <button>Buy Now</button>
+        </div>
+    </div>
+</body>
+</html>
