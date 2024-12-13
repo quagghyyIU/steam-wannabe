@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Games</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #1b2838;
+            padding: 15px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            padding: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #1b2838;
+            color: white;
+        }
+        .game-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>My Games</h1>
+    <nav>
+        <a href="/developer-dashboard">Back to Dashboard</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="content">
+    <h2>Uploaded Games</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Price ($)</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% games.forEach(game => { %>
+                <tr>
+                    <td><img src="<%= game.Image %>" alt="Game Image" class="game-image"></td>
+                    <td><%= game.Title %></td>
+                    <td><%= game.Category %></td>
+                    <td><%= game.Price.toFixed(2) %></td>
+                    <td><%= game.Description %></td>
+                    <td><%= game.Status %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

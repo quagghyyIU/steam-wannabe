@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #1b2838;
+            padding: 15px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            padding: 30px;
+        }
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            margin: auto;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            color: #555;
+            font-weight: bold;
+        }
+        input, textarea, select, button {
+            margin-top: 5px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 15px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #005bb5;
+        }
+        .notification {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .success {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border: 1px solid #badbcc;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Developer Dashboard</h1>
+    <nav>
+        <a href="/developer-games">My Games</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="content">
+    <div class="form-container">
+        <h2>Upload New Game</h2>
+        <div id="notification" class="notification"></div>
+        <form id="uploadForm" action="/upload-game" method="POST" enctype="multipart/form-data">
+            <label for="title">Game Title:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="category">Category:</label>
+            <select id="category" name="category" required>
+                <option value="Action">Action</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Strategy">Strategy</option>
+                <option value="Sports">Sports</option>
+                <option value="Role-Playing Game - RPG">Role-Playing Game - RPG</option>
+                <option value="First-Person Shooter - FPS">First-Person Shooter - FPS</option>
+                <option value="Multiplayer Online Battle Arena - MOBA">Multiplayer Online Battle Arena - MOBA</option>
+                <option value="Survival">Survival</option>
+                <option value="Simulation">Simulation</option>
+                <option value="Educational">Educational</option>
+            </select>
+
+            <label for="price">Price ($):</label>
+            <input type="number" id="price" name="price" min="0" step="0.01" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+
+            <label for="image">Game Image:</label>
+            <input type="file" id="image" name="image" accept="image/png" required>
+
+            <button type="submit">Upload Game</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const notification = document.getElementById('notification');
+
+    function showNotification(message, type) {
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.style.display = 'block';
+        setTimeout(() => notification.style.display = 'none', 3000);
+    }
+
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+
+        try {
+            const response = await fetch('/upload-game', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showNotification('Game uploaded successfully!', 'success');
+                e.target.reset();
+            } else {
+                showNotification(result.message || 'Game upload failed!', 'error');
+            }
+        } catch (error) {
+            console.error(error);
+            showNotification('Something went wrong. Please try again.', 'error');
+        }
+    });
+</script>
+</body>
+</html>
