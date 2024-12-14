@@ -3,107 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <title>User Dashboard</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f3f4f6;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background: #1b2838;
-            padding: 15px 30px;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        header h1 {
-            margin: 0;
-        }
-        nav a {
-            color: white;
-            margin: 0 15px;
-            text-decoration: none;
-            font-size: 16px;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        .content {
-            padding: 30px;
-        }
-        .game-card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 250px;
-            display: inline-block;
-        }
-        .game-card img {
-            width: 100%;
-            height: 150px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-        .game-card h3 {
-            margin: 10px 0;
-            color: #333;
-        }
-        .game-card p {
-            color: #555;
-        }
-        .game-card button {
-            background: #1b2838;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .game-card button:hover {
-            background: #3b5162;
+        .card:hover {
+            transform: scale(1.05); /* Slight zoom effect */
+            transition: transform 0.2s ease-in-out;
+            cursor: pointer; /* Shows a pointer cursor */
         }
     </style>
+
 </head>
-<body>
-    <header>
-        <h1>Game Store</h1>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/library">My Library</a>
-            <a href="/profile">Profile</a>
-            <a href="/logout">Logout</a>
-        </nav>
-    </header>
+<body style="background-color: #1b2838; color: white;">
 
-    <div class="content">
-        <h2>Featured Games</h2>
-        <div class="game-card">
-            <img src="https://via.placeholder.com/250x150" alt="Game 1">
-            <h3>Game Title 1</h3>
-            <p>$29.99</p>
-            <button>Buy Now</button>
-        </div>
-
-        <div class="game-card">
-            <img src="https://via.placeholder.com/250x150" alt="Game 2">
-            <h3>Game Title 2</h3>
-            <p>$19.99</p>
-            <button>Buy Now</button>
-        </div>
-
-        <div class="game-card">
-            <img src="https://via.placeholder.com/250x150" alt="Game 3">
-            <h3>Game Title 3</h3>
-            <p>$39.99</p>
-            <button>Buy Now</button>
-        </div>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="/dashboard">Steam</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="/dashboard">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/dashboard">Store</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+        </ul>
     </div>
+</nav>
+
+<div class="container mt-4">
+    <h1>Welcome, <%= user.username %>!</h1>
+    <p>Explore our collection of games below!</p>
+
+    <!-- Search and Filter Form -->
+    <form class="form-inline mb-3" method="GET" action="/dashboard">
+        <!-- Search -->
+        <input type="text" name="search" class="form-control mr-2" placeholder="Search by title" value="<%= search || '' %>">
+
+        <!-- Filter by Category -->
+        <select name="category" class="form-control mr-2">
+            <option value="">All Categories</option>
+            <option value="Shooter" <%= category === 'Shooter' ? 'selected' : '' %>>Shooter</option>
+            <option value="RPG" <%= category === 'RPG' ? 'selected' : '' %>>RPG</option>
+            <option value="Adventure" <%= category === 'Adventure' ? 'selected' : '' %>>Adventure</option>
+        </select>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <!-- Game Grid -->
+    <div class="row">
+        <% if (games.length === 0) { %>
+            <!-- Display this message if no games are found -->
+            <div class="col-12 text-center">
+                <p class="text-muted">No games found for your search criteria.</p>
+            </div>
+        <% } else { %>
+            <!-- Render games if found -->
+            <% games.forEach(game => { %>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <!-- Wrap the card in an anchor tag -->
+                    <a href="/game/<%= game.GameID %>" class="text-decoration-none">
+                        <div class="card bg-dark text-white">
+                            <img src="<%= game.Image %>" class="card-img-top" alt="<%= game.Title %>">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= game.Title %></h5>
+                                <p class="card-text">$<%= game.Price.toFixed(2) %></p>
+                                <p class="card-text"><%= game.Description %></p>
+                                <p class="card-text">
+                                    Categories:
+                                    <%= game.Categories ? game.Categories.split(',').join(', ') : 'None' %>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <% }) %>
+        <% } %>
+    </div>
+</div>
+
 </body>
 </html>

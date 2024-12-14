@@ -43,9 +43,70 @@ app.get('/', (req, res) => {
     res.render('home'); // Render the home.ejs file
 });
 
-// Render the user dashboard
+// Render the user dashboard (store)
 app.get('/dashboard', isAuthenticated, (req, res) => {
-    res.render('user_dashboard', { user: req.session.user });
+    // Get search and category from query string
+    const search = req.query.search || '';
+    const category = req.query.category || '';
+
+    // Construct SQL query
+    let query = 'SELECT * FROM Game WHERE 1=1';
+    const params = [];
+
+    // Add search condition
+    if (search) {
+        query += ' AND Title LIKE ?';
+        params.push(`%${search}%`);
+    }
+
+    // Add category condition
+    if (category) {
+        query += ' AND Category = ?';
+        params.push(category);
+    }
+
+    // Execute query
+    db.all(query, params, (err, rows) => {
+        if (err) {
+            console.error(err.message);
+            return res.status(500).send('Database error');
+        }
+
+        // Render EJS file (only once!)
+        res.render('user_dashboard', {
+            user: req.session.user,
+            games: rows,
+            search,
+            category
+        });
+    });
+});
+
+// Game detail route
+app.get('/game/:id', isAuthenticated, (req, res) => {
+    const gameId = req.params.id;
+
+    // Query to fetch game details by GameID
+    const query = `
+        SELECT
+            GameID, Title, Price, Image, Description
+        FROM Game
+        WHERE GameID = ?
+    `;
+
+    db.get(query, [gameId], (err, game) => {
+        if (err) {
+            console.error(err.message);
+            return res.status(500).send('Database error');
+        }
+
+        if (!game) {
+            return res.status(404).send('Game not found');
+        }
+
+        // Render the game detail page with the fetched data
+        res.render('game_detail', { game });
+    });
 });
 
 // Render the register page
