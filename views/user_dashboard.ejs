@@ -12,40 +12,40 @@
             cursor: pointer; /* Shows a pointer cursor */
         }
     </style>
-
 </head>
 <body style="background-color: #1b2838; color: white;">
 
-<!-- Navbar -->
-<!-- Navbar -->
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand" href="/dashboard">Steam</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="/dashboard">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="/dashboard">Store</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
-        </ul>
-        <!-- Cart button -->
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/cart">
-                    <img src="/cart-icon.png" alt="Cart" style="height: 24px; width: 24px;">
-                    Cart
-                </a>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-        </ul>
-    </div>
-</nav>
-
-
-<div class="container mt-4">
-    <h1>Welcome, <%= user.username %>!</h1>
-    <p>Explore our collection of games below!</p>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <a class="navbar-brand" href="/dashboard">Steam</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="/dashboard">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/dashboard">Store</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+            </ul>
+            <!-- Cart button -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart">
+                        <img src="/cart-icon.png" alt="Cart" style="height: 24px; width: 24px;">
+                        Cart
+                    </a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+            </ul>
+            <span class="navbar-text text-white">
+                Wallet: $<%= user.wallet.toFixed(2) %>
+            </span>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <h1>Welcome, <%= user.username %>!</h1>
+        <p>Explore our collection of games below!</p>
 
     <!-- Search and Filter Form -->
     <form class="form-inline mb-3" method="GET" action="/dashboard">
@@ -55,9 +55,16 @@
         <!-- Filter by Category -->
         <select name="category" class="form-control mr-2">
             <option value="">All Categories</option>
-            <option value="Shooter" <%= category === 'Shooter' ? 'selected' : '' %>>Shooter</option>
-            <option value="RPG" <%= category === 'RPG' ? 'selected' : '' %>>RPG</option>
+            <option value="Action" <%= category === 'Action' ? 'selected' : '' %>>Action</option>
             <option value="Adventure" <%= category === 'Adventure' ? 'selected' : '' %>>Adventure</option>
+            <option value="Strategy" <%= category === 'Strategy' ? 'selected' : '' %>>Strategy</option>
+            <option value="Sports" <%= category === 'Sports' ? 'selected' : '' %>>Sports</option>
+            <option value="Role-Playing Game - RPG" <%= category === 'Role-Playing Game - RPG' ? 'selected' : '' %>>Role-Playing Game - RPG</option>
+            <option value="First-Person Shooter - FPS" <%= category === 'First-Person Shooter - FPS' ? 'selected' : '' %>>First-Person Shooter - FPS</option>
+            <option value="Multiplayer Online Battle Arena - MOBA" <%= category === 'Multiplayer Online Battle Arena - MOBA' ? 'selected' : '' %>>Multiplayer Online Battle Arena - MOBA</option>
+            <option value="Survival" <%= category === 'Survival' ? 'selected' : '' %>>Survival</option>
+            <option value="Simulation" <%= category === 'Simulation' ? 'selected' : '' %>>Simulation</option>
+            <option value="Educational" <%= category === 'Educational' ? 'selected' : '' %>>Educational</option>
         </select>
 
         <!-- Submit Button -->
@@ -84,8 +91,7 @@
                                 <p class="card-text">$<%= game.Price.toFixed(2) %></p>
                                 <p class="card-text"><%= game.Description %></p>
                                 <p class="card-text">
-                                    Categories:
-                                    <%= game.Categories ? game.Categories.split(',').join(', ') : 'None' %>
+                                    <strong>Category:</strong> <%= game.Category %>
                                 </p>
                             </div>
                         </div>
@@ -95,6 +101,5 @@
         <% } %>
     </div>
 </div>
-
 </body>
 </html>

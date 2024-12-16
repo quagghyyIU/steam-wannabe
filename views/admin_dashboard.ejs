@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #1b2838;
+            padding: 15px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            padding: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #1b2838;
+            color: white;
+        }
+        .game-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .action-buttons button {
+            padding: 5px 10px;
+            margin: 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+        .approve {
+            background: #28a745;
+        }
+        .decline {
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Admin Dashboard</h1>
+    <nav>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="content">
+    <h2>Pending Game Requests</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Price ($)</th>
+                <th>Description</th>
+                <th>Developer</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% games.forEach(game => { %>
+                <tr>
+                    <td><img src="<%= game.Image %>" alt="Game Image" class="game-image"></td>
+                    <td><%= game.Title %></td>
+                    <td><%= game.Category %></td>
+                    <td><%= game.Price.toFixed(2) %></td>
+                    <td><%= game.Description %></td>
+                    <td><%= game.StudioName %></td>
+                    <td><%= game.Status %></td>
+                    <td class="action-buttons">
+                        <% if (game.Status === 'Pending') { %>
+                            <button class="approve" onclick="handleAction('<%= game.GameID %>', 'Approved')">Approve</button>
+                            <button class="decline" onclick="handleAction('<%= game.GameID %>', 'Declined')">Decline</button>
+                        <% } else { %>
+                            <em>No actions available</em>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    async function handleAction(gameID, status) {
+        try {
+            const response = await fetch(`/admin/action`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ gameID, status }),
+            });
+            const result = await response.json();
+
+            if (response.ok) {
+                alert(`Game ${status.toLowerCase()} successfully!`);
+                location.reload();
+            } else {
+                alert(result.message || 'Action failed!');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Something went wrong. Please try again.');
+        }
+    }
+</script>
+</body>
+</html>
