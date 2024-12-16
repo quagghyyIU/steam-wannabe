@@ -82,33 +82,6 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
     });
 });
 
-// Game detail route
-app.get('/game/:id', isAuthenticated, (req, res) => {
-    const gameId = req.params.id;
-
-    // Query to fetch game details by GameID
-    const query = `
-        SELECT
-            GameID, Title, Price, Image, Description
-        FROM Game
-        WHERE GameID = ?
-    `;
-
-    db.get(query, [gameId], (err, game) => {
-        if (err) {
-            console.error(err.message);
-            return res.status(500).send('Database error');
-        }
-
-        if (!game) {
-            return res.status(404).send('Game not found');
-        }
-
-        // Render the game detail page with the fetched data
-        res.render('game_detail', { game });
-    });
-});
-
 // Render the register page
 app.get('/register', (req, res) => {
     const message = req.session.message || ''; // Ensure message is defined
@@ -200,6 +173,154 @@ app.get('/logout', (req, res) => {
         res.redirect('/login');
     });
 });
+
+// Game detail route
+app.get('/game/:id', isAuthenticated, (req, res) => {
+    const gameId = req.params.id;
+
+    // Query to fetch game details by GameID
+    const query = `
+        SELECT
+            GameID, Title, Price, Image, Description
+        FROM Game
+        WHERE GameID = ?
+    `;
+
+    db.get(query, [gameId], (err, game) => {
+        if (err) {
+            console.error(err.message);
+            return res.status(500).send('Database error');
+        }
+
+        if (!game) {
+            return res.status(404).send('Game not found');
+        }
+
+        // Render the game detail page with the fetched data
+        res.render('game_detail', { game });
+    });
+});
+
+// View Cart Route
+app.get('/cart', isAuthenticated, (req, res) => {
+    const userID = req.session.user.id;
+
+    // Get user's active cart and associated games
+    const query = `
+        SELECT g.GameID, g.Title, g.Price, g.Image 
+        FROM CartGame cg
+        JOIN Cart c ON cg.CartID = c.CartID
+        JOIN Game g ON cg.GameID = g.GameID
+        WHERE c.UserID = ?;
+    `;
+
+    db.all(query, [userID], (err, games) => {
+        if (err) {
+            console.error(err.message);
+            return res.status(500).send("Error retrieving cart.");
+        }
+        res.render('cart_page', { user: req.session.user, games });
+    });
+});
+
+app.post('/cart/add', isAuthenticated, (req, res) => {
+    const { gameID } = req.body;
+    const userID = req.session.user.id;
+
+    if (!gameID) {
+        return res.status(400).send("Invalid game ID.");
+    }
+
+    // Check if the user already owns the game in the Library
+    const libraryCheckQuery = `SELECT 1 FROM Library WHERE UserID = ? AND GameID = ?`;
+    db.get(libraryCheckQuery, [userID, gameID], (err, row) => {
+        if (err) {
+            console.error(err.message);
+            return res.status(500).send("Database error.");
+        }
+        if (row) {
+            return res.status(400).send("You already own this game.");
+        }
+
+        // Get or create a cart for the user
+        const cartCheckQuery = `SELECT CartID FROM Cart WHERE UserID = ?`;
+        db.get(cartCheckQuery, [userID], (err, cart) => {
+            if (err) return res.status(500).send("Error retrieving cart.");
+
+            const cartID = cart ? cart.CartID : null;
+
+            // If no cart exists, create one
+            if (!cartID) {
+                const createCartQuery = `INSERT INTO Cart (UserID) VALUES (?)`;
+                db.run(createCartQuery, [userID], function (err) {
+                    if (err) return res.status(500).send("Error creating cart.");
+                    addGameToCart(this.lastID, gameID, res);
+                });
+            } else {
+                // Add game to the existing cart
+                addGameToCart(cartID, gameID, res);
+            }
+        });
+    });
+});
+
+// Helper function to add a game to the cart
+function addGameToCart(cartID, gameID, res) {
+    const cartGameCheck = `SELECT 1 FROM CartGame WHERE CartID = ? AND GameID = ?`;
+    db.get(cartGameCheck, [cartID, gameID], (err, row) => {
+        if (err) return res.status(500).send("Error checking cart.");
+        if (row) return res.status(400).send("Game already in cart.");
+
+        const insertQuery = `INSERT INTO CartGame (CartID, GameID) VALUES (?, ?)`;
+        db.run(insertQuery, [cartID, gameID], (err) => {
+            if (err) return res.status(500).send("Error adding game to cart.");
+            res.redirect('/cart'); // Redirect to cart page
+        });
+    });
+}
+
+
+// Remove Game from Cart
+app.post('/cart/remove', isAuthenticated, (req, res) => {
+    const { gameID } = req.body;
+    const userID = req.session.user.id;
+
+    const query = `
+        DELETE FROM CartGame 
+        WHERE GameID = ? AND CartID = (SELECT CartID FROM Cart WHERE UserID = ?);
+    `;
+
+    db.run(query, [gameID, userID], (err) => {
+        if (err) return res.status(500).send("Error removing game.");
+        res.redirect('/cart');
+    });
+});
+
+// Checkout Cart
+app.post('/cart/checkout', isAuthenticated, (req, res) => {
+    const userID = req.session.user.id;
+
+    const transferQuery = `
+        INSERT INTO Library (UserID, GameID, PurchaseDate)
+        SELECT c.UserID, cg.GameID, CURRENT_TIMESTAMP
+        FROM CartGame cg
+        JOIN Cart c ON cg.CartID = c.CartID
+        WHERE c.UserID = ?;
+    `;
+    const clearCartQuery = `
+        DELETE FROM CartGame 
+        WHERE CartID = (SELECT CartID FROM Cart WHERE UserID = ?);
+    `;
+
+    db.run(transferQuery, [userID], (err) => {
+        if (err) return res.status(500).send("Checkout failed.");
+        db.run(clearCartQuery, [userID], (err) => {
+            if (err) return res.status(500).send("Error clearing cart.");
+            res.send("Checkout successful! Games added to your library.");
+        });
+    });
+});
+
 
 // Start server
 app.listen(port, () => {
