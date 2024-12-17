@@ -1,4 +1,3 @@
-/* General Body Style */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -6,7 +5,6 @@ body {
     background-color: #1b2838; /* Epic Gamer dark theme */
     color: #c7d5e0; /* Light text */
 }
-
 /* Header Style */
 header {
     background-color: #171a21; /* Header dark background */
@@ -15,18 +13,15 @@ header {
     justify-content: space-between;
     align-items: center;
 }
-
 header a {
     color: #c7d5e0;
     text-decoration: none;
     margin: 0 10px;
     font-size: 18px;
 }
-
 header a:hover {
     color: #66c0f4; /* Hover effect */
 }
-
 /* Main Content Style */
 main {
     padding: 40px 20px;
@@ -37,24 +32,20 @@ main {
     max-width: 800px; /* Centered, limited width for better readability */
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Subtle shadow for elevation */
 }
-
 h1 {
     font-size: 42px;
     color: #66c0f4; /* Accent color */
     margin-bottom: 20px;
 }
-
 p {
     font-size: 18px;
     line-height: 1.6;
     color: #c7d5e0;
 }
-
 /* Navigation Section */
 nav {
     margin-top: 20px;
 }
-
 nav a {
     padding: 10px 20px;
     background-color: #66c0f4;
@@ -66,11 +57,9 @@ nav a {
     display: inline-block; /* Keep buttons inline */
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for nav buttons */
 }
-
 nav a:hover {
     background-color: #417a9b; /* Darker hover effect */
 }
-
 /* Footer Style */
 footer {
     margin-top: 30px;
@@ -80,7 +69,6 @@ footer {
     color: #c7d5e0;
     font-size: 14px;
 }
-
 /* Highlighted Content Section */
 .highlight {
     background-color: #1b2838;
@@ -91,7 +79,6 @@ footer {
     font-weight: bold;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
-
 /* General Button Styling */
 .button, .debug {
     display: inline-block; /* Makes them behave like buttons */
@@ -104,25 +91,21 @@ footer {
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s ease; /* Smooth color transition */
 }
-
 /* Specific Styling for Get Started Button */
 .button {
     background-color: #66c0f4; /* Bright blue background */
     color: #ffffff; /* White text color */
     border: none; /* Remove border */
 }
-
 .button:hover {
     background-color: #417a9b; /* Darker blue on hover */
 }
-
 /* Specific Styling for Debug Button */
 .debug {
     background-color: #e74c3c; /* Red background for debug */
     color: #ffffff; /* White text color */
     border: none; /* Remove border */
 }
-
 .debug:hover {
     background-color: #c0392b; /* Darker red on hover */
 }
