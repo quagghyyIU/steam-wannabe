@@ -1,0 +1,79 @@
+body {
+    background-color: #1b2838;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background: #1b2838;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #444;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.wallet-info {
+    color: #ccc;
+    font-size: 16px;
+}
+
+.form-container {
+    background: #2a3f54;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 600px;
+    margin: 50px auto;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ddd;
+    font-size: 24px;
+}
+
+.btn-primary {
+    background-color: #0066cc;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #005bb5;
+}
+
+.form-control, .form-control-file {
+    margin-bottom: 15px;
+}
+
+.nav-link {
+    color: white !important;
+}
+
+/* Notification styles */
+#notification {
+    display: none;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+#notification.success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+#notification.error {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
