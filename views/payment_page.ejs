@@ -13,7 +13,10 @@
     <p class="text-center">Wallet Balance: $<%= userWallet.toFixed(2) %></p>
     <p class="text-center">Total Amount: $<%= totalAmount.toFixed(2) %></p>
 
-    <form action="/cart/confirm-payment" method="POST" class="text-center mt-4">
+    <!-- Notification Message -->
+    <div id="notification" class="alert d-none" role="alert"></div>
+
+    <form id="paymentForm" action="/cart/confirm-payment" method="POST" class="text-center mt-4">
         <h4>Select Payment Method:</h4>
 
         <div class="form-check">
@@ -30,6 +33,53 @@
         <a href="/cart" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
+
+<script>
+    document.getElementById('paymentForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        // Chuyển FormData thành URLSearchParams để gửi dưới dạng application/x-www-form-urlencoded
+        const data = new URLSearchParams();
+        for (const [key, value] of formData.entries()) {
+            data.append(key, value);
+        }
+
+        const notification = document.getElementById('notification');
+        notification.classList.add('d-none');
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: data.toString()
+            });
+
+            const text = await response.text();
+
+            if (response.ok) {
+                notification.className = 'alert alert-success';
+                notification.textContent = text || 'Payment successful! Games have been added to your library, You gonna be redirected to the homepage in 3s.';
+                notification.classList.remove('d-none');
+
+                // Chuyển về trang chính sau 3 giây
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 3000);
+            } else {
+                notification.className = 'alert alert-danger';
+                notification.textContent = text || 'Payment failed. Please try again.';
+                notification.classList.remove('d-none');
+            }
+        } catch (error) {
+            notification.className = 'alert alert-danger';
+            notification.textContent = 'An error occurred. Please try again.';
+            notification.classList.remove('d-none');
+        }
+    });
+</script>
 
 </body>
 </html>
