@@ -30,6 +30,7 @@ const gameRoutes = require('./routes/game');
 const developerRoutes = require('./routes/developer');
 const adminRoutes = require('./routes/admin');
 const paymentRoutes = require('./routes/payment');
+const libraryRoutes = require('./routes/library');
 
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
@@ -38,6 +39,7 @@ app.use('/', gameRoutes);
 app.use('/', developerRoutes);
 app.use('/', adminRoutes);
 app.use('/', paymentRoutes);
+app.use('/', libraryRoutes);
 
 // Global error handler (optional)
 app.use((err, req, res, next) => {
