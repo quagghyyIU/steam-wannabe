@@ -1,0 +1,50 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/dashboard">Steam-wannabe</a>
+
+        <!-- Toggler for mobile view -->
+        <button 
+            class="navbar-toggler" 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" 
+            aria-expanded="false" 
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">Store</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Support</a>
+                </li>
+            </ul>
+
+            <!-- Right-aligned links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center" href="/cart">
+                        <img 
+                            src="/images/cart-icon.png" 
+                            alt="Cart" 
+                            style="height: 24px; width: 24px; margin-right: 5px;">
+                        Cart
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-light" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

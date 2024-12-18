@@ -6,48 +6,33 @@
     <title>My Games</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <style>
-        /* General Page Styling */
+        /* Retain Dark Theme Colors */
         body {
             background-color: #1b2838;
             color: white;
         }
 
-        /* Header Styling */
-        header {
+        .header-custom {
             background: #1b2838;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             border-bottom: 1px solid #444;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .wallet-info {
-            color: #ccc;
-            font-size: 16px;
-        }
-
-        /* Table Styling */
-        table {
+        .table-custom {
             background: #2a3f54;
             border-radius: 10px;
             overflow: hidden;
         }
 
-        th {
+        .table th {
             background: #1b2838;
             color: white;
+            border-color: #444;
         }
 
-        td {
-            color: white; /* Set table font color to white */
+        .table td {
             background: #2a3f54;
+            color: white;
+            border-color: #444;
         }
 
         .game-image {
@@ -56,47 +41,61 @@
             object-fit: cover;
             border-radius: 5px;
         }
+
+        .btn-outline-custom {
+            color: #ccc;
+            border-color: #ccc;
+        }
+
+        .btn-outline-custom:hover {
+            background-color: #444;
+            color: white;
+        }
     </style>
 </head>
 <body>
+
 <!-- Header -->
-<header class="d-flex justify-content-between align-items-center px-4 py-2">
-    <h1 class="m-0">My Games</h1>
-    <div class="d-flex align-items-center">
-        <a href="/developer-dashboard" class="btn btn-outline-light mr-2">Back to Dashboard</a>
-        <a href="/logout" class="btn btn-outline-danger">Logout</a>
+<header class="header-custom py-3">
+    <div class="container d-flex justify-content-between align-items-center">
+        <h1 class="h3 mb-0">My Games</h1>
+        <div>
+            <a href="/developer-dashboard" class="btn btn-outline-custom btn-sm mr-2">Back to Dashboard</a>
+            <a href="/logout" class="btn btn-outline-danger btn-sm">Logout</a>
+        </div>
     </div>
 </header>
 
 <!-- Table of Uploaded Games -->
 <div class="container mt-4">
-    <h2>Uploaded Games</h2>
+    <h2 class="text-center mb-4">Published Games</h2>
+
     <% if (games.length === 0) { %>
         <div class="alert alert-warning text-center">You have not uploaded any games yet.</div>
     <% } else { %>
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Price ($)</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                </tr>
+        <div class="table-responsive table-custom p-3">
+            <table class="table table-bordered table-hover mb-0">
+                <thead class="text-center">
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Price ($)</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                    </tr>
                 </thead>
                 <tbody>
                 <% games.forEach(game => { %>
                     <tr>
-                        <td>
+                        <td class="text-center">
                             <img src="<%= game.Image %>" alt="Game Image" class="game-image">
                         </td>
-                        <td><%= game.Title %></td>
-                        <td><%= game.Category %></td>
-                        <td>$<%= game.Price.toFixed(2) %></td>
-                        <td><%= game.Description %></td>
-                        <td><%= game.Status %></td>
+                        <td class="align-middle"><%= game.Title %></td>
+                        <td class="align-middle text-center"><%= game.Category %></td>
+                        <td class="align-middle text-center">$<%= game.Price.toFixed(2) %></td>
+                        <td class="align-middle"><%= game.Description %></td>
+                        <td class="align-middle text-center"><%= game.Status %></td>
                     </tr>
                 <% }); %>
                 </tbody>
@@ -104,5 +103,6 @@
         </div>
     <% } %>
 </div>
+
 </body>
 </html>

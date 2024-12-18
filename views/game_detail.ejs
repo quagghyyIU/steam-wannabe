@@ -9,24 +9,24 @@
 <body style="background-color: #1b2838; color: white;">
 
 <!-- Include Navbar Partial -->
-<%- include('partials/navbar') %>
+<%- include('partials/header') %>
 
 <div class="container mt-4">
-    <!-- Hiển thị thông báo nếu có -->
+    <!-- Display Alert If Game Already in Library -->
     <% if (typeof message !== 'undefined' && message === 'already_in_cart') { %>
         <div class="alert alert-warning" role="alert">
             This game is already in your library.
         </div>
     <% } %>
 
-    <div class="row">
+    <div class="row align-items-stretch">
         <!-- Game Image -->
-        <div class="col-md-6">
-            <img src="<%= game.Image %>" class="img-fluid" alt="<%= game.Title %>" style="border-radius: 10px;">
+        <div class="col-md-6 d-flex">
+            <img src="<%= game.Image %>" class="img-fluid w-100 rounded" alt="<%= game.Title %>">
         </div>
 
         <!-- Game Details -->
-        <div class="col-md-6">
+        <div class="col-md-6 d-flex flex-column justify-content-center">
             <h1><%= game.Title %></h1>
             <p class="text-muted">Game ID: <%= game.GameID %></p>
             <p><%= game.Description %></p>
@@ -47,6 +47,8 @@
         </div>
     </div>
 </div>
+
+<%- include('partials/footer') %>
 
 </body>
 </html>
