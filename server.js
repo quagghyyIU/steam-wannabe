@@ -120,8 +120,8 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
 // Game Detail Route
 app.get('/game/:id', isAuthenticated, (req, res) => {
     const gameId = req.params.id;
+    const { message } = req.query; // Lấy message từ query param
 
-    // Query to fetch game details
     const query = `
         SELECT GameID, Title, Price, Image, Description, GameDetails
         FROM Game
@@ -138,8 +138,7 @@ app.get('/game/:id', isAuthenticated, (req, res) => {
             return res.status(404).send('Game not found');
         }
 
-        // Render the game detail page with the fetched data
-        res.render('game_detail', { game });
+        res.render('game_detail', { game, message }); // Truyền message vào view
     });
 });
 
@@ -181,7 +180,8 @@ app.post('/cart/add', isAuthenticated, (req, res) => {
             return res.status(500).send("Database error.");
         }
         if (row) {
-            return res.status(400).send("You already own this game.");
+            // Nếu game đã có trong Cart
+            return res.redirect(`/game/${gameID}?message=already_in_cart`);
         }
 
         // Get or create a cart for the user
@@ -273,8 +273,6 @@ app.post('/cart/checkout', isAuthenticated, (req, res) => {
         });
     });
 });
-
-
 
 // Render the register page
 app.get('/register', (req, res) => {
@@ -486,24 +484,6 @@ app.get('/developer-games', isAuthenticated, (req, res) => {
         }
 
         res.render('developer_games', { games: rows });
-    });
-});
-
-// Render Payment Page
-app.post('/cart/checkout', isAuthenticated, (req, res) => {
-    const userID = req.session.user.id;
-
-    // Fetch user wallet
-    const userQuery = `SELECT Wallet FROM User WHERE UserID = ?`;
-
-    db.get(userQuery, [userID], (err, user) => {
-        if (err || !user) {
-            console.error('User wallet retrieval error:', err?.message || 'User not found');
-            return res.status(500).send('Database error');
-        }
-
-        // Render Payment Page
-        res.render('payment_page', { user: { ...req.session.user, wallet: user.Wallet } });
     });
 });
 
