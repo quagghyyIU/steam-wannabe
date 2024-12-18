@@ -15,7 +15,7 @@
 <body style="background-color: #1b2838; color: white;">
 
 <!-- Include Global Navbar -->
-<%- include('partials/navbar') %>
+<%- include('partials/header') %>
 
 <!-- Cart Content -->
 <div class="container mt-4">
@@ -43,11 +43,14 @@
             <% }) %>
         </div>
         <!-- Checkout Button -->
-        <form action="/cart/checkout" method="POST">
+        <form action="/cart/checkout" method="POST" class="mt-4 mb-5">
             <button type="submit" class="btn btn-success btn-lg">Proceed to Checkout</button>
         </form>
+
     <% } %>
 </div>
+
+<%- include('partials/footer') %>
 
 </body>
 </html>
