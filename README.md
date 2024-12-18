@@ -139,7 +139,7 @@ The file upload functionality is handled using **Multer**:
 - Introduce game categories and search functionality.
 
 ## Contributors
-- [Your Name](#): CEO and Lead Developer
+- Huy, Hien and Thinh
 - Contributions are welcome! Please submit a pull request.
 
 ## License
