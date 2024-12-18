@@ -4,118 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <style>
         body {
+            background-color: #1b2838;
+            color: white;
             font-family: Arial, sans-serif;
-            background: #f3f4f6;
-            margin: 0;
-            padding: 0;
         }
+
         header {
             background: #1b2838;
             padding: 15px 30px;
-            color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #444;
         }
+
         header h1 {
             margin: 0;
+            font-size: 28px;
+            font-weight: bold;
         }
-        nav a {
-            color: white;
-            margin: 0 15px;
-            text-decoration: none;
-            font-size: 16px;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        .content {
-            padding: 30px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background: #1b2838;
-            color: white;
-        }
+
         .game-image {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             object-fit: cover;
             border-radius: 5px;
         }
-        .action-buttons button {
-            padding: 5px 10px;
-            margin: 2px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+
+        .table th {
+            background-color: #1b2838;
             color: white;
         }
-        .approve {
-            background: #28a745;
-        }
-        .decline {
-            background: #dc3545;
+
+        .table td {
+            background-color: #2a3f54;
+            color: #dcdcdc;
         }
     </style>
 </head>
 <body>
-<header>
-    <h1>Admin Dashboard</h1>
-    <nav>
-        <a href="/logout">Logout</a>
-    </nav>
+
+<!-- Header -->
+<header class="d-flex justify-content-between align-items-center px-4 py-2">
+    <h1 class="m-0">Admin Dashboard</h1>
+    <div class="d-flex align-items-center">
+        <a href="/logout" class="btn btn-outline-danger">Logout</a>
+    </div>
 </header>
 
-<div class="content">
-    <h2>Pending Game Requests</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Price ($)</th>
-                <th>Description</th>
-                <th>Developer</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% games.forEach(game => { %>
+<!-- Content -->
+<div class="container mt-4">
+    <h2 class="mb-4">Pending Game Requests</h2>
+
+    <% if (games.length === 0) { %>
+        <div class="alert alert-info text-center" role="alert">
+            No pending game requests at this time.
+        </div>
+    <% } else { %>
+        <div class="table-responsive">
+            <table class="table table-dark table-bordered table-hover">
+                <thead>
                 <tr>
-                    <td><img src="<%= game.Image %>" alt="Game Image" class="game-image"></td>
-                    <td><%= game.Title %></td>
-                    <td><%= game.Category %></td>
-                    <td><%= game.Price.toFixed(2) %></td>
-                    <td><%= game.Description %></td>
-                    <td><%= game.StudioName %></td>
-                    <td><%= game.Status %></td>
-                    <td class="action-buttons">
-                        <% if (game.Status === 'Pending') { %>
-                            <button class="approve" onclick="handleAction('<%= game.GameID %>', 'Approved')">Approve</button>
-                            <button class="decline" onclick="handleAction('<%= game.GameID %>', 'Declined')">Decline</button>
-                        <% } else { %>
-                            <em>No actions available</em>
-                        <% } %>
-                    </td>
+                    <th class="text-center">Image</th>
+                    <th class="text-center">Title</th>
+                    <th class="text-center">Category</th>
+                    <th class="text-center">Price ($)</th>
+                    <th class="text-center">Description</th>
+                    <th class="text-center">Developer</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Actions</th>
                 </tr>
-            <% }); %>
-        </tbody>
-    </table>
+                </thead>
+                <tbody>
+                <% games.forEach(game => { %>
+                    <tr>
+                        <td><img src="<%= game.Image %>" alt="Game Image" class="game-image"></td>
+                        <td><%= game.Title %></td>
+                        <td><%= game.Category %></td>
+                        <td>$<%= game.Price.toFixed(2) %></td>
+                        <td><%= game.Description %></td>
+                        <td><%= game.StudioName %></td>
+                        <td><%= game.Status %></td>
+                        <td>
+                            <% if (game.Status === 'Pending') { %>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button class="btn btn-success" onclick="handleAction('<%= game.GameID %>', 'Approved')">Approve</button>
+                                    <button class="btn btn-danger" onclick="handleAction('<%= game.GameID %>', 'Declined')">Decline</button>
+                                </div>
+                            <% } else { %>
+                                <span class="text-muted">No actions available</span>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
 </div>
+
+<!-- Bootstrap JS and Dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
     async function handleAction(gameID, status) {
