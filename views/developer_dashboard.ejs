@@ -45,13 +45,15 @@
             color: #ddd !important;
         }
 
-        #notification.success {
+        /* Notification for Success */
+        #notification.alert-success {
             background-color: #d1e7dd;
             color: #0f5132;
             border: 1px solid #badbcc;
         }
 
-        #notification.error {
+        /* Notification for Error */
+        #notification.alert-danger {
             background-color: #f8d7da;
             color: #842029;
             border: 1px solid #f5c2c7;
@@ -113,6 +115,11 @@
             </div>
 
             <div class="form-group">
+                <label for="gameDetails" class="text-light">Game Details:</label>
+                <textarea id="gameDetails" name="gameDetails" class="form-control bg-secondary text-white" rows="5" placeholder="Enter game details" required></textarea>
+            </div>
+
+            <div class="form-group">
                 <label for="image" class="text-light">Game Image:</label>
                 <input type="file" id="image" name="image" class="form-control-file" accept="image/png" required>
             </div>
@@ -124,15 +131,34 @@
 
 <script>
     const notification = document.getElementById('notification');
-
     function showNotification(message, type) {
-        notification.textContent = message;
-        notification.className = `alert alert-${type}`;
-        notification.classList.remove('d-none');
+        notification.textContent = message; // Set the notification text
+        notification.className = `alert d-block alert-${type}`; // Apply Bootstrap alert classes
         setTimeout(() => {
-            notification.classList.add('d-none');
+            notification.className = 'alert d-none'; // Hide after 3 seconds
         }, 3000);
     }
+
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        try {
+            const response = await fetch('/upload-game', {
+                method: 'POST',
+                body: formData,
+            });
+            const result = await response.json();
+            if (response.ok) {
+                showNotification('Game uploaded successfully!', 'success');
+                e.target.reset();
+            } else {
+                showNotification(result.message || 'Game upload failed!', 'error');
+            }
+        } catch (error) {
+            console.error(error);
+            showNotification('Something went wrong. Please try again.', 'error');
+        }
+    });
 </script>
 </body>
 </html>
