@@ -49,7 +49,7 @@ router.post('/cart/confirm-payment', isAuthenticated, (req, res) => {
                 });
             });
         } else {
-            res.send('Payment successful using other methods!');
+            res.send('Other methods in development!');
         }
     });
 });
